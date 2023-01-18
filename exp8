@@ -1,0 +1,97 @@
+#include <iostream>
+using namespace std;
+// Node structure for a binary search tree
+struct Node {
+  int data;
+  Node* left;
+  Node* right;
+};
+
+// Function to create a new node
+Node* createNode(int data) {
+  Node* node = new Node();
+  node->data = data;
+  node->left = nullptr;
+  node->right = nullptr;
+  return node;
+}
+
+// Function to insert a new node in the binary search tree
+void insertNode(Node*& root, int data) {
+  if (root == nullptr) {
+    root = createNode(data);
+  } else if (data <= root->data) {
+    insertNode(root->left, data);
+  } else {
+    insertNode(root->right, data);
+  }
+}
+
+// Function to find the number of nodes in the longest path of the tree
+int findLongestPath(Node* root) {
+  if (root == nullptr) {
+    return 0;
+  }
+  int left = findLongestPath(root->left);
+  int right = findLongestPath(root->right);
+  return max(left, right) + 1;
+}
+
+// Function to find the minimum value in the tree
+int findMinimumValue(Node* root) {
+  if (root == nullptr) {
+    return -1;
+  }
+  while (root->left != nullptr) {
+    root = root->left;
+  }
+  return root->data;
+}
+
+// Function to swap the left and right pointers of every node in the tree
+void swapPointers(Node* root) {
+  if (root == nullptr) {
+    return;
+  }
+  swap(root->left, root->right);
+  swapPointers(root->left);
+  swapPointers(root->right);
+}
+
+// Function to search for a value in the tree
+bool searchValue(Node* root, int data) {
+  if (root == nullptr) {
+    return false;
+  }
+  if (root->data == data) {
+    return true;
+  }
+  if (data < root->data) {
+    return searchValue(root->left, data);
+  }
+  return searchValue(root->right, data);
+}
+
+int main(void) {
+  // Create an empty binary search tree
+  Node* root = nullptr;
+
+  // Insert some values into the tree
+  insertNode(root, 5);
+  insertNode(root, 3);
+  insertNode(root, 8);
+  insertNode(root, 1);
+  insertNode(root, 4);
+  insertNode(root, 7);
+  insertNode(root, 10);
+
+  // Insert a new node with value 6
+  insertNode(root, 6);
+
+  // Find the number of nodes in the longest path of the tree
+  cout << "Longest path:--> " << findLongestPath(root) << endl;
+
+  // Find the minimum value in the tree
+  cout << "Minimum value: --> " << findMinimumValue(root) << endl;
+  cout << "Search value (root ,  value)--> " << searchValue(root , 1) << endl;
+}
